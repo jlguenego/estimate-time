@@ -1,17 +1,17 @@
 <template>
   <form
-    class="w-full max-w-xl flex flex-col sm:flex-row items-stretch gap-4"
+    class="flex w-full max-w-xl flex-col items-stretch gap-4 sm:flex-row"
     @submit.prevent="emitEstimate"
   >
     <input
       v-model="repo"
       type="text"
       placeholder="ex : facebook/react"
-      class="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="flex-1 rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-base"
     />
     <button
       type="submit"
-      class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition"
+      class="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
     >
       Estimer
     </button>
