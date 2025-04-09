@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 
-defineProps<{
+const props = defineProps<{
   heatmap: Record<string, number>;
 }>();
 
@@ -65,7 +65,10 @@ const heatmapData = ref<number[]>([]);
 function generateHeatmapData(year: number): number[] {
   const isLeap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   const days = isLeap ? 366 : 365;
-  return Array.from({ length: days }, () => Math.floor(Math.random() * 5));
+  return Array.from({ length: days }, () => {
+    const date = new Date(year, 0, Math.floor(Math.random() * days) + 1);
+    return props.heatmap[date.toISOString().split("T")[0]] || 0;
+  });
 }
 
 function updateData() {
