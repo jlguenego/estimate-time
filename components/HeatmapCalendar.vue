@@ -1,8 +1,46 @@
 <template>
   <div class="flex w-full flex-col items-center py-4">
-    <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">
-      Répartition des sessions en 2025
-    </h2>
+    <div class="mb-4 flex items-center space-x-4">
+      <button
+        @click="prevYear"
+        class="cursor-pointer rounded bg-gray-200 px-2 py-1 text-white hover:bg-gray-300"
+      >
+        <svg
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </button>
+      <h2 class="w-80 text-center text-xl font-semibold text-gray-800">
+        sessions en {{ currentYear }}
+      </h2>
+      <button
+        @click="nextYear"
+        class="cursor-pointer rounded bg-gray-200 px-2 py-1 text-white hover:bg-gray-300"
+      >
+        <svg
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      </button>
+    </div>
     <div class="grid grid-flow-col grid-cols-53 grid-rows-7 gap-1">
       <div
         v-for="(count, i) in heatmapData"
@@ -15,9 +53,30 @@
 </template>
 
 <script setup lang="ts">
-const heatmapData = Array.from({ length: 366 }, () =>
-  Math.floor(Math.random() * 5),
-); // Placeholder
+import { ref, computed, watch } from "vue";
+
+const currentYear = ref(new Date().getFullYear());
+const heatmapData = ref<number[]>([]);
+
+function generateHeatmapData(year: number): number[] {
+  const isLeap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  const days = isLeap ? 366 : 365;
+  return Array.from({ length: days }, () => Math.floor(Math.random() * 5));
+}
+
+function updateData() {
+  heatmapData.value = generateHeatmapData(currentYear.value);
+}
+
+function prevYear() {
+  currentYear.value--;
+}
+
+function nextYear() {
+  currentYear.value++;
+}
+
+watch(currentYear, updateData, { immediate: true });
 
 function getColor(count: number): string {
   if (count === 0) return "bg-gray-200";
