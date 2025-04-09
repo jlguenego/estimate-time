@@ -60,19 +60,26 @@ const props = defineProps<{
 }>();
 
 const currentYear = ref(new Date().getFullYear());
-const heatmapData = ref<number[]>([]);
+const heatmapData = computed(() => {
+  return generateHeatmapData(currentYear.value, props.heatmap);
+});
 
-function generateHeatmapData(year: number): number[] {
+function generateHeatmapData(
+  year: number,
+  heatmap: Record<string, number>,
+): number[] {
   const isLeap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   const days = isLeap ? 366 : 365;
-  return Array.from({ length: days }, () => {
-    const date = new Date(year, 0, Math.floor(Math.random() * days) + 1);
-    return props.heatmap[date.toISOString().split("T")[0]] || 0;
+  return Array.from({ length: days }, (n, i) => {
+    const date = addDays(new Date(year, 0, 1), i);
+    return heatmap[date.toISOString().split("T")[0]] || 0;
   });
 }
 
-function updateData() {
-  heatmapData.value = generateHeatmapData(currentYear.value);
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date); // create a new Date instance to avoid mutating the original
+  result.setDate(result.getDate() + days);
+  return result;
 }
 
 function prevYear() {
@@ -82,8 +89,6 @@ function prevYear() {
 function nextYear() {
   currentYear.value++;
 }
-
-watch(currentYear, updateData, { immediate: true });
 
 function getColor(count: number): string {
   if (!count) return "bg-gray-200";
