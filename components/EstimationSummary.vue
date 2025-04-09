@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="w-full max-w-xl space-y-4 rounded-xl bg-gray-50 p-6 text-center shadow-md"
-  >
+  <div class="w-full rounded-xl bg-gray-50 p-6 text-center shadow-md">
     <h2 class="text-xl font-semibold text-gray-800">Estimation</h2>
     <div
       class="flex flex-col justify-center gap-6 text-2xl font-bold text-blue-700 sm:flex-row"

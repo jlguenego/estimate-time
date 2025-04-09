@@ -1,7 +1,7 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+  <div class="flex min-h-screen items-center justify-center bg-gray-100 p-4">
     <div
-      class="flex flex-col items-center space-y-12 rounded-2xl bg-white px-12 py-8 text-gray-900 shadow-2xl"
+      class="flex max-w-192 flex-col items-center rounded-2xl bg-white px-12 py-4 text-gray-900 shadow-2xl"
     >
       <!-- Titre principal -->
       <Header />
