@@ -1,21 +1,23 @@
 <template>
-  <div
-    class="min-h-screen bg-white text-gray-900 flex flex-col items-center px-4 py-10 space-y-12"
-  >
-    <!-- Titre principal -->
-    <Header />
+  <div class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+    <div
+      class="rounded-lg shadow-lg min-h-screen bg-white text-gray-900 flex flex-col items-center px-4 py-10 space-y-12"
+    >
+      <!-- Titre principal -->
+      <Header />
 
-    <!-- Formulaire d'entrée GitHub -->
-    <GithubInput @estimate="handleEstimate" />
+      <!-- Formulaire d'entrée GitHub -->
+      <GithubInput @estimate="handleEstimate" />
 
-    <!-- Illustration vectorielle -->
-    <Illustration />
+      <!-- Illustration vectorielle -->
+      <Illustration />
 
-    <!-- Résumé de l'estimation -->
-    <EstimationSummary :hours="24" :sessions="48" :workdays="3" />
+      <!-- Résumé de l'estimation -->
+      <EstimationSummary :hours="24" :sessions="48" :workdays="3" />
 
-    <!-- Dataviz calendrier thermique -->
-    <HeatmapCalendar />
+      <!-- Dataviz calendrier thermique -->
+      <HeatmapCalendar />
+    </div>
   </div>
 </template>
 
