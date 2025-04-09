@@ -27,7 +27,7 @@ const handleEstimate = (repo: string) => {
       />
 
       <!-- Dataviz calendrier thermique -->
-      <HeatmapCalendar />
+      <HeatmapCalendar :heatmap="estimate.heatmap" />
     </div>
   </div>
 </template>

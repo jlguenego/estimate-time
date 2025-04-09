@@ -55,6 +55,10 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 
+defineProps<{
+  heatmap: Record<string, number>;
+}>();
+
 const currentYear = ref(new Date().getFullYear());
 const heatmapData = ref<number[]>([]);
 
@@ -79,10 +83,10 @@ function nextYear() {
 watch(currentYear, updateData, { immediate: true });
 
 function getColor(count: number): string {
-  if (count === 0) return "bg-gray-200";
+  if (!count) return "bg-gray-200";
   if (count === 1) return "bg-blue-100";
-  if (count === 2) return "bg-blue-300";
-  if (count === 3) return "bg-blue-500";
+  if (count <= 3) return "bg-blue-300";
+  if (count <= 5) return "bg-blue-500";
   return "bg-blue-700";
 }
 </script>
