@@ -1,5 +1,3 @@
-import { defineStore } from "pinia";
-
 export const useEstimateStore = defineStore("estimate", () => {
   const repo = ref("");
   const sessions = ref(0);
@@ -13,10 +11,11 @@ export const useEstimateStore = defineStore("estimate", () => {
 
     let page = 1;
     const perPage = 100;
+    const maxPages = 10; // ← Limite fixée ici (modifiable)
     let totalCommits = 0;
     let keepGoing = true;
 
-    while (keepGoing) {
+    while (keepGoing && page <= maxPages) {
       const res = await fetch(
         `https://api.github.com/repos/${owner}/${name}/commits?per_page=${perPage}&page=${page}`,
       );
@@ -24,13 +23,16 @@ export const useEstimateStore = defineStore("estimate", () => {
 
       if (!Array.isArray(data)) {
         console.error("Erreur API GitHub", data);
-        keepGoing = false;
         break;
       }
 
       totalCommits += data.length;
       keepGoing = data.length === perPage;
       page++;
+    }
+
+    if (page > maxPages) {
+      window.alert("Limite de pages atteinte, estimation partielle.");
     }
 
     sessions.value = totalCommits;
