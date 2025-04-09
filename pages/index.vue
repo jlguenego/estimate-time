@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { useEstimateStore } from "~/stores/estimate";
+
+const estimate = useEstimateStore();
+
+const handleEstimate = (repo: string) => {
+  estimate.estimateFromRepo(repo);
+};
+</script>
+
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-100 p-4">
     <div
@@ -10,19 +20,14 @@
       <GithubInput @estimate="handleEstimate" />
 
       <!-- Résumé de l'estimation -->
-      <EstimationSummary :hours="24" :sessions="48" :workdays="3" />
+      <EstimationSummary
+        :hours="estimate.hours"
+        :sessions="estimate.sessions"
+        :workdays="estimate.workdays"
+      />
 
       <!-- Dataviz calendrier thermique -->
       <HeatmapCalendar />
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-// Pas besoin de script ici, tout passe par les composants
-
-const handleEstimate = (repo: string) => {
-  // Logique pour gérer l'estimation ici
-  console.log("Estimation demandée pour le dépôt :", repo);
-};
-</script>

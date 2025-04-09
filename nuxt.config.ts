@@ -6,5 +6,6 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  modules: ["@pinia/nuxt"],
   css: ["~/assets/css/main.css"],
 });
