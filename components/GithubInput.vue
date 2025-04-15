@@ -48,6 +48,6 @@ import { ref } from "vue";
 const estimateStore = useEstimateStore();
 
 const handleSubmit = () => {
-  estimateStore.estimateFromRepo(estimateStore.repo);
+  estimateStore.estimateFromRepo();
 };
 </script>

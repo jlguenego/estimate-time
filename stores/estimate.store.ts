@@ -1,5 +1,5 @@
 export const useEstimateStore = defineStore("estimate", () => {
-  const repo = ref("");
+  const repo = ref("jlguenego/estimate-time");
   const sessions = ref(0);
   const hours = ref(0);
   const workdays = ref(0);
@@ -13,14 +13,13 @@ export const useEstimateStore = defineStore("estimate", () => {
     heatmap.value = {};
   }
 
-  async function estimateFromRepo(repoId: string) {
+  async function estimateFromRepo() {
     const settingsStore = useSettingsStore();
     const sessionDuration = settingsStore.sessionDuration; // en minutes
     console.log("sessionDuration: ", sessionDuration);
-    repo.value = repoId;
     resetStore(); // Réinitialiser le store avant de commencer
 
-    const [owner, name] = repoId.split("/");
+    const [owner, name] = repo.value.split("/");
     if (!owner || !name) return;
 
     let page = 1;
