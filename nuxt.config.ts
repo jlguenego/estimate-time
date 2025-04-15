@@ -8,4 +8,11 @@ export default defineNuxtConfig({
   },
   modules: ["@pinia/nuxt"],
   css: ["~/assets/css/main.css"],
+  nitro: {
+    preset: "static",
+  },
+  app: {
+    baseURL: "/estimate-time/",
+  },
+  ssr: true,
 });
