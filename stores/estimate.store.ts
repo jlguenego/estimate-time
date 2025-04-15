@@ -16,8 +16,12 @@ export const useEstimateStore = defineStore("estimate", () => {
   async function estimateFromRepo() {
     const settingsStore = useSettingsStore();
     const sessionDuration = settingsStore.sessionDuration; // en minutes
-    console.log("sessionDuration: ", sessionDuration);
-    resetStore(); // Réinitialiser le store avant de commencer
+    const sessionGapThreshold = sessionDuration;
+
+    console.log("sessionDuration (min):", sessionDuration);
+    console.log("sessionGapThreshold (min):", sessionGapThreshold);
+
+    resetStore();
 
     const [owner, name] = repo.value.split("/");
     if (!owner || !name) return;
@@ -25,9 +29,9 @@ export const useEstimateStore = defineStore("estimate", () => {
     let page = 1;
     const perPage = 100;
     const maxPages = 10;
-    let keepGoing = true;
+    let allCommits = [];
 
-    while (keepGoing && page <= maxPages) {
+    while (page <= maxPages) {
       const res = await fetch(
         `https://api.github.com/repos/${owner}/${name}/commits?per_page=${perPage}&page=${page}`,
       );
@@ -38,20 +42,54 @@ export const useEstimateStore = defineStore("estimate", () => {
         break;
       }
 
-      for (const commit of data) {
-        const dateStr = commit.commit?.author?.date;
-        if (dateStr) {
-          const dateKey = dateStr.slice(0, 10); // 'YYYY-MM-DD'
-          heatmap.value[dateKey] = (heatmap.value[dateKey] || 0) + 1;
-        }
-      }
-
-      keepGoing = data.length === perPage;
+      allCommits.push(...data);
+      if (data.length < perPage) break;
       page++;
     }
 
-    sessions.value = Object.values(heatmap.value).reduce((a, b) => a + b, 0);
-    hours.value = +((sessions.value * sessionDuration) / 60).toFixed(1);
+    const timestamps = allCommits
+      .map((c) => c.commit?.author?.date)
+      .filter(Boolean)
+      .map((d) => new Date(d).getTime())
+      .sort((a, b) => a - b);
+
+    const sessionsList = [];
+    let currentSession: number[] = [];
+
+    for (let i = 0; i < timestamps.length; i++) {
+      const current = timestamps[i];
+      const previous = timestamps[i - 1];
+
+      if (i === 0 || current - previous > sessionGapThreshold * 60 * 1000) {
+        if (currentSession.length > 0) sessionsList.push(currentSession);
+        currentSession = [current];
+      } else {
+        currentSession.push(current);
+      }
+    }
+    if (currentSession.length > 0) sessionsList.push(currentSession);
+
+    sessions.value = sessionsList.length;
+
+    let totalMinutes = 0;
+
+    for (const session of sessionsList) {
+      if (session.length === 1) {
+        totalMinutes += sessionDuration;
+      } else {
+        let sessionMinutes = sessionDuration;
+        for (let i = 1; i < session.length; i++) {
+          const delta = (session[i] - session[i - 1]) / (60 * 1000); // minutes
+          sessionMinutes += delta;
+        }
+        totalMinutes += sessionMinutes;
+      }
+
+      const dateKey = new Date(session[0]).toISOString().slice(0, 10);
+      heatmap.value[dateKey] = (heatmap.value[dateKey] || 0) + 1;
+    }
+
+    hours.value = +(totalMinutes / 60).toFixed(1);
     workdays.value = Math.ceil(hours.value / 8);
   }
 
