@@ -1,4 +1,3 @@
-import { formatISO, parseISO } from "date-fns"; // facultatif, sinon JS natif
 export const useEstimateStore = defineStore("estimate", () => {
   const repo = ref("");
   const sessions = ref(0);
@@ -7,12 +6,19 @@ export const useEstimateStore = defineStore("estimate", () => {
 
   const heatmap = ref<Record<string, number>>({});
 
-  async function estimateFromRepo(repoId: string) {
-    repo.value = repoId;
-    heatmap.value = {}; // reset
+  function resetStore() {
     sessions.value = 0;
     hours.value = 0;
     workdays.value = 0;
+    heatmap.value = {};
+  }
+
+  async function estimateFromRepo(repoId: string) {
+    const settingsStore = useSettingsStore();
+    const sessionDuration = settingsStore.sessionDuration; // en minutes
+    console.log("sessionDuration: ", sessionDuration);
+    repo.value = repoId;
+    resetStore(); // Réinitialiser le store avant de commencer
 
     const [owner, name] = repoId.split("/");
     if (!owner || !name) return;
@@ -46,9 +52,17 @@ export const useEstimateStore = defineStore("estimate", () => {
     }
 
     sessions.value = Object.values(heatmap.value).reduce((a, b) => a + b, 0);
-    hours.value = +(sessions.value * 0.5).toFixed(1);
+    hours.value = +((sessions.value * sessionDuration) / 60).toFixed(1);
     workdays.value = Math.ceil(hours.value / 8);
   }
 
-  return { repo, sessions, hours, workdays, estimateFromRepo, heatmap };
+  return {
+    repo,
+    sessions,
+    hours,
+    workdays,
+    estimateFromRepo,
+    heatmap,
+    resetStore,
+  };
 });

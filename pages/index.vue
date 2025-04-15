@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { useEstimateStore } from "~/stores/estimate";
+import { useEstimateStore } from "~/stores/estimate.store";
 
 const estimate = useEstimateStore();
-
-const handleEstimate = (repo: string) => {
-  estimate.estimateFromRepo(repo);
-};
 </script>
 
 <template>
@@ -17,7 +13,7 @@ const handleEstimate = (repo: string) => {
       <Header />
 
       <!-- Formulaire d'entrée GitHub -->
-      <GithubInput @estimate="handleEstimate" />
+      <GithubInput />
 
       <!-- Résumé de l'estimation -->
       <EstimationSummary
