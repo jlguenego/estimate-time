@@ -3,9 +3,7 @@
     <div
       class="flex max-w-192 flex-col items-center rounded-2xl bg-white px-12 py-4 text-gray-900 shadow-2xl"
     >
-      <h1 class="mb-4 text-2xl font-bold text-blue-600">
-        Réglages de l’estimation
-      </h1>
+      <h1 class="mb-4 text-2xl font-bold text-blue-600">Settings</h1>
 
       <p>
         A session corresponds to at least one commit. It is estimated that to
