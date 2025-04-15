@@ -20,7 +20,7 @@
         </svg>
       </button>
       <h2 class="w-80 text-center text-xl font-semibold text-gray-800">
-        sessions en {{ currentYear }}
+        sessions in {{ currentYear }}
       </h2>
       <button
         @click="nextYear"

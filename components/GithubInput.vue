@@ -13,7 +13,7 @@
       type="submit"
       class="w-40 cursor-pointer rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 active:scale-95"
     >
-      Estimer
+      Estimate
     </button>
     <NuxtLink
       to="/settings"

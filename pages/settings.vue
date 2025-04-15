@@ -8,15 +8,15 @@
       </h1>
 
       <p>
-        Une session correspond à au moins un commit. On estime que pour commiter
-        le développeur et les concepteurs auront passé au moins un temps minimum
-        de durée de session. Une session peut contenir plusieurs commits. Dans
-        ce cas, la durée de la session est la somme des durées entre chaque
-        commit, additionnée à la durée de la session.
+        A session corresponds to at least one commit. It is estimated that to
+        make a commit, the developer and designers will have spent at least a
+        minimum session duration. A session may contain several commits. In that
+        case, the session duration is the sum of the time intervals between each
+        commit, added to the minimum session duration.
       </p>
 
       <label class="my-6 block">
-        <span class="font-bold">Durée d'une session (en minutes) :</span>
+        <span class="font-bold"> Minimum session duration (in minutes) : </span>
         <input
           v-model.number="settings.sessionDuration"
           type="number"
